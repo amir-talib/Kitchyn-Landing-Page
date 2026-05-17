@@ -2,9 +2,11 @@ import { useGSAP } from "@gsap/react";
 import { useRef } from "react";
 import gsap from "gsap";
 import { SplitText } from "gsap/all";
+import { useMediaQuery } from "react-responsive";
 
 const HeroSection = () => {
   const videoRef = useRef(null);
+  const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   useGSAP(() => {
     const titleSplit = SplitText.create(".hero-title", {
@@ -68,32 +70,47 @@ const HeroSection = () => {
     });
 
     const video = videoRef.current;
-    const startZoom = (duration) => {
-      gsap.fromTo(
-        video,
-        { scale: 1 },
-        { scale: 1.8, duration, ease: "none", transformOrigin: "center center" }
-      );
-    };
+    if (video) {
+      const startZoom = (duration) => {
+        gsap.fromTo(
+          video,
+          { scale: 1 },
+          { scale: 1.8, duration, ease: "none", transformOrigin: "center center" }
+        );
+      };
 
-    if (video.readyState >= 1) {
-      startZoom(video.duration);
-    } else {
-      video.addEventListener("loadedmetadata", () => startZoom(video.duration), { once: true });
+      if (video.readyState >= 1) {
+        startZoom(video.duration);
+      } else {
+        video.addEventListener("loadedmetadata", () => startZoom(video.duration), { once: true });
+      }
     }
   });
 
   return (
     <section className="bg-main-bg">
       <div className="hero-container">
-        <video
-          ref={videoRef}
-          src="/videos/hero-bg.mp4"
-          autoPlay
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+        {isMobile ? (
+          <div
+            className="absolute inset-0 w-full h-full"
+            style={{
+              background: `
+                radial-gradient(ellipse at 15% 85%, #9d4edd55 0%, transparent 55%),
+                radial-gradient(ellipse at 85% 15%, #7b2cbf44 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, #3c096c 0%, #240046 50%, #10002b 100%)
+              `,
+            }}
+          />
+        ) : (
+          <video
+            ref={videoRef}
+            src="/videos/hero-bg.mp4"
+            autoPlay
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        )}
         <div className="hero-content opacity-0">
           <div className="overflow-hidden">
             <h1 className="hero-title">Run Your Orders</h1>

@@ -14,11 +14,10 @@
 
  </div>
 
- <h3 style="font-weight:700;font-size:30px;">AWWWARDS Site of the Day Website</h3>
+ <h3 style="font-weight:700;font-size:30px;">Kitchyn — Marketing Site</h3>
 
   <div >
-    Ready to build a website that has won an Awwwards Site of the Day?
-    This tutorial guides you through creating a stunning, interactive site using <b>GSAP</b>, <b>ReactJS</b>, and <b>Tailwind CSS</b>.
+    The marketing site for <b>Kitchyn</b> — the easiest way to grow your restaurant sales online. Branded storefronts, direct payments, smart logistics. Built with <b>GSAP</b>, <b>ReactJS</b>, and <b>Tailwind CSS</b> on an Awwwards-grade animation foundation.
    </div>
 </div>
 

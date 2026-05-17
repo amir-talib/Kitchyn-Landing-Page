@@ -1,12 +1,16 @@
-import { useRef } from "react";
+import { useMediaQuery } from "react-responsive";
 import { cards } from "../constants";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 
 const TestimonialSection = () => {
-  const vdRef = useRef([]);
+  const isTablet = useMediaQuery({
+    query: "(max-width: 1024px)",
+  });
 
   useGSAP(() => {
+    if (isTablet) return;
+
     gsap.set(".testimonials-section", {
       marginTop: "-140vh",
     });
@@ -55,40 +59,59 @@ const TestimonialSection = () => {
     });
   });
 
-  const handlePlay = (index) => {
-    const video = vdRef.current[index];
-    video.play();
-  };
-
-  const handlePause = (index) => {
-    const video = vdRef.current[index];
-    video.pause();
-  };
-
   return (
     <section className="testimonials-section">
       <div className="absolute size-full flex flex-col items-center pt-[5vw]">
-        <h1 className="text-black first-title">What's</h1>
-        <h1 className="text-light-brown sec-title">Everyone</h1>
-        <h1 className="text-black third-title">Talking</h1>
+        <h1 className="text-black first-title">Don&apos;t take</h1>
+        <h1 className="text-light-brown sec-title">our</h1>
+        <h1 className="text-black third-title">word for it.</h1>
       </div>
 
       <div className="pin-box">
         {cards.map((card, index) => (
           <div
             key={index}
-            className={`vd-card ${card.translation} ${card.rotation}`}
-            onMouseEnter={() => handlePlay(index)}
-            onMouseLeave={() => handlePause(index)}
+            className={`vd-card ${card.translation ?? ""} ${card.rotation}`}
+            style={{ backgroundColor: card.bg }}
           >
-            <video
-              ref={(el) => (vdRef.current[index] = el)}
-              src={card.src}
-              playsInline
-              muted
-              loop
-              className="size-full object-cover"
-            />
+            <div className="size-full flex flex-col justify-between p-7 lg:p-[1.5vw]">
+              <span
+                className="font-sans font-bold leading-none select-none"
+                style={{
+                  fontSize: "clamp(4rem, 8vw, 7rem)",
+                  color: card.accent,
+                  opacity: 0.25,
+                  lineHeight: 1,
+                }}
+              >
+                &ldquo;
+              </span>
+
+              <p
+                className="font-paragraph leading-[130%] text-white"
+                style={{ fontSize: "clamp(0.9rem, 1.3vw, 1.15rem)" }}
+              >
+                {card.quote}
+              </p>
+
+              <div
+                className="flex flex-col gap-1 border-t pt-4"
+                style={{ borderColor: card.accent + "40" }}
+              >
+                <span
+                  className="font-sans font-bold uppercase tracking-widest text-sm"
+                  style={{ color: card.accent }}
+                >
+                  {card.name}
+                </span>
+                <span
+                  className="font-paragraph text-xs"
+                  style={{ color: card.accent, opacity: 0.6 }}
+                >
+                  {card.role}
+                </span>
+              </div>
+            </div>
           </div>
         ))}
       </div>

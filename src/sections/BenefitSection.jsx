@@ -46,39 +46,36 @@ const BenefitSection = () => {
     <section className="benefit-section">
       <div className="container mx-auto pt-20">
         <div className="col-center">
-          <p>
-            Unlock the Advantages: <br />
-            Explore the Key Benefits of Choosing SPYLT
-          </p>
+          <p>Here's what you get.</p>
 
           <div className="mt-20 col-center">
             <ClipPathTitle
-              title={"Shelf stable"}
-              color={"#faeade"}
-              bg={"#c88e64"}
+              title={"1% commission. Full stop."}
+              color={"#f5f0ff"}
+              bg={"#5a189a"}
               className={"first-title"}
-              borderColor={"#222123"}
+              borderColor={"#10002b"}
             />
             <ClipPathTitle
-              title={"Protein + Caffeine"}
-              color={"#222123"}
-              bg={"#faeade"}
+              title={"Live in 24 hours."}
+              color={"#10002b"}
+              bg={"#f5f0ff"}
               className={"second-title"}
-              borderColor={"#222123"}
+              borderColor={"#10002b"}
             />
             <ClipPathTitle
-              title={"Infinitely recyclable"}
-              color={"#faeade"}
-              bg={"#7F3B2D"}
+              title={"Your customers, always."}
+              color={"#f5f0ff"}
+              bg={"#240046"}
               className={"third-title"}
-              borderColor={"#222123"}
+              borderColor={"#10002b"}
             />
             <ClipPathTitle
-              title={"Lactose free"}
-              color={"#2E2D2F"}
-              bg={"#FED775"}
+              title={"Built to scale"}
+              color={"#10002b"}
+              bg={"#c77dff"}
               className={"fourth-title"}
-              borderColor={"#222123"}
+              borderColor={"#10002b"}
             />
           </div>
 

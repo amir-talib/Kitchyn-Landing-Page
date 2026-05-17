@@ -1,16 +1,10 @@
 import { useGSAP } from "@gsap/react";
+import { useRef } from "react";
 import gsap from "gsap";
 import { SplitText } from "gsap/all";
-import { useMediaQuery } from "react-responsive";
 
 const HeroSection = () => {
-  const isMobile = useMediaQuery({
-    query: "(max-width: 768px)",
-  });
-
-  const isTablet = useMediaQuery({
-    query: "(max-width: 1024px)",
-  });
+  const videoRef = useRef(null);
 
   useGSAP(() => {
     const titleSplit = SplitText.create(".hero-title", {
@@ -43,6 +37,18 @@ const HeroSection = () => {
           ease: "power2.out",
         },
         "-=0.5"
+      )
+      .to(
+        ".hero-text-scroll",
+        {
+          rotation: -1.5,
+          y: -8,
+          duration: 2.4,
+          ease: "sine.inOut",
+          yoyo: true,
+          repeat: -1,
+        },
+        "+=0.2"
       );
 
     const heroTl = gsap.timeline({
@@ -57,38 +63,40 @@ const HeroSection = () => {
       rotate: 7,
       scale: 0.9,
       yPercent: 30,
+      clipPath: "inset(0% 5% 0% 5% round 3vw)",
       ease: "power1.inOut",
     });
+
+    const video = videoRef.current;
+    const startZoom = (duration) => {
+      gsap.fromTo(
+        video,
+        { scale: 1 },
+        { scale: 1.8, duration, ease: "none", transformOrigin: "center center" }
+      );
+    };
+
+    if (video.readyState >= 1) {
+      startZoom(video.duration);
+    } else {
+      video.addEventListener("loadedmetadata", () => startZoom(video.duration), { once: true });
+    }
   });
 
   return (
     <section className="bg-main-bg">
       <div className="hero-container">
-        {isTablet ? (
-          <>
-            {isMobile && (
-              <img
-                src="/images/hero-bg.png"
-                className="absolute bottom-40 size-full object-cover"
-              />
-            )}
-            <img
-              src="/images/hero-img.png"
-              className="absolute bottom-0 left-1/2 -translate-x-1/2 object-auto"
-            />
-          </>
-        ) : (
-          <video
-            src="/videos/hero-bg.mp4"
-            autoPlay
-            muted
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-        )}
+        <video
+          ref={videoRef}
+          src="/videos/hero-bg.mp4"
+          autoPlay
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+        />
         <div className="hero-content opacity-0">
           <div className="overflow-hidden">
-            <h1 className="hero-title">Freaking Delicious</h1>
+            <h1 className="hero-title">Run Your Orders</h1>
           </div>
           <div
             style={{
@@ -97,17 +105,17 @@ const HeroSection = () => {
             className="hero-text-scroll"
           >
             <div className="hero-subtitle">
-              <h1>Protein + Caffine </h1>
+              <h1>Own Your Kitchyn</h1>
             </div>
           </div>
 
           <h2>
-            Live life to the fullest  with SPYLT: Shatter boredom and embrace
-            your inner kid with every deliciously smooth chug.
+            Launch your branded storefront in 24 hours. Take direct orders.
+            Keep what you earn. We charge 1%.
           </h2>
 
           <div className="hero-button">
-            <p>Chug a SPYLT</p>
+            <p>Book a Demo</p>
           </div>
         </div>
       </div>

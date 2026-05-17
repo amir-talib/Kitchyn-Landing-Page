@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <defs>
+    <filter id="sh-white">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.15)"/>
+    </filter>
+  </defs>
+
+  <!-- Expected Payout mini card — top right -->
+  <g transform="translate(555,25) rotate(5)" filter="url(#sh-white)">
+    <rect width="210" height="70" rx="14" fill="#3c096c"/>
+    <text x="105" y="24" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="system-ui,-apple-system,sans-serif" font-weight="600" font-size="11">EXPECTED PAYOUT</text>
+    <text x="105" y="52" text-anchor="middle" fill="white" font-family="system-ui,-apple-system,sans-serif" font-weight="700" font-size="20">N176,376</text>
+  </g>
+
+  <!-- 170 orders badge — top left -->
+  <g transform="translate(22,42) rotate(-5)" filter="url(#sh-white)">
+    <rect width="155" height="40" rx="20" fill="#240046" stroke="#3c096c" stroke-width="1.5"/>
+    <text x="77" y="25" text-anchor="middle" fill="white" font-family="system-ui,-apple-system,sans-serif" font-weight="700" font-size="14">170 orders</text>
+  </g>
+
+  <!-- Total Paid Out — left center -->
+  <g transform="translate(15,265) rotate(-4)" filter="url(#sh-white)">
+    <rect width="185" height="56" rx="13" fill="#3c096c"/>
+    <text x="92" y="22" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="system-ui,-apple-system,sans-serif" font-weight="500" font-size="11">TOTAL PAID OUT</text>
+    <text x="92" y="44" text-anchor="middle" fill="white" font-family="system-ui,-apple-system,sans-serif" font-weight="700" font-size="16">N2,713,832</text>
+  </g>
+
+  <!-- Avg order badge — bottom right -->
+  <g transform="translate(590,500) rotate(4)" filter="url(#sh-white)">
+    <rect width="170" height="54" rx="13" fill="#240046"/>
+    <text x="85" y="22" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="system-ui,-apple-system,sans-serif" font-weight="500" font-size="11">AVG ORDER</text>
+    <text x="85" y="42" text-anchor="middle" fill="white" font-family="system-ui,-apple-system,sans-serif" font-weight="700" font-size="15">N16,696</text>
+  </g>
+
+  <!-- Settlement pending — bottom left -->
+  <g transform="translate(14,510) rotate(-3)" filter="url(#sh-white)">
+    <rect width="190" height="36" rx="18" fill="#5a189a"/>
+    <text x="95" y="23" text-anchor="middle" fill="white" font-family="system-ui,-apple-system,sans-serif" font-weight="600" font-size="13">Earnings settled</text>
+  </g>
+</svg>

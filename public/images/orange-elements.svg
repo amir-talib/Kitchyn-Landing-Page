@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <defs>
+    <filter id="sh-orange">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.25)"/>
+    </filter>
+  </defs>
+
+  <!-- #1 rank circle — top left -->
+  <g transform="translate(35,30) rotate(-5)" filter="url(#sh-orange)">
+    <circle cx="36" cy="36" r="36" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+    <text x="36" y="28" text-anchor="middle" fill="white" font-family="system-ui,-apple-system,sans-serif" font-weight="700" font-size="11">#1</text>
+    <text x="36" y="46" text-anchor="middle" fill="rgba(255,255,255,0.85)" font-family="system-ui,-apple-system,sans-serif" font-weight="600" font-size="10">Top item</text>
+  </g>
+
+  <!-- 33 sold badge — top right -->
+  <g transform="translate(605,40) rotate(6)" filter="url(#sh-orange)">
+    <rect width="145" height="44" rx="22" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+    <text x="72" y="28" text-anchor="middle" fill="white" font-family="system-ui,-apple-system,sans-serif" font-weight="700" font-size="16">33 sold</text>
+  </g>
+
+  <!-- N286,200 revenue — left center -->
+  <g transform="translate(18,250) rotate(-4)" filter="url(#sh-orange)">
+    <rect width="185" height="44" rx="13" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+    <text x="92" y="27" text-anchor="middle" fill="white" font-family="system-ui,-apple-system,sans-serif" font-weight="700" font-size="15">N286,200</text>
+  </g>
+
+  <!-- Loaded Fries tag — bottom right -->
+  <g transform="translate(560,500) rotate(5)" filter="url(#sh-orange)">
+    <rect width="195" height="40" rx="10" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+    <text x="97" y="25" text-anchor="middle" fill="white" font-family="system-ui,-apple-system,sans-serif" font-weight="700" font-size="13">Loaded Fries</text>
+  </g>
+
+  <!-- Chicken Shawarma tag — bottom left -->
+  <g transform="translate(14,506) rotate(-3)" filter="url(#sh-orange)">
+    <rect width="200" height="40" rx="10" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+    <text x="100" y="25" text-anchor="middle" fill="white" font-family="system-ui,-apple-system,sans-serif" font-weight="600" font-size="12">Chicken Shawarma</text>
+  </g>
+</svg>

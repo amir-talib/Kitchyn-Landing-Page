@@ -1,6 +1,8 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { ScrollTrigger, SplitText } from "gsap/all";
 import { useMediaQuery } from "react-responsive";
+import { Link } from "react-router-dom";
 
 const VideoPinSection = () => {
   const isMobile = useMediaQuery({
@@ -24,6 +26,40 @@ const VideoPinSection = () => {
         ease: "power1.inOut",
       });
     }
+
+    const setupTitleReveal = () => {
+      const titleEl = document.querySelector(".video-title");
+      if (!titleEl) return;
+
+      const titleSplit = SplitText.create(titleEl, { type: "chars,words" });
+
+      ScrollTrigger.create({
+        trigger: ".vd-pin-section",
+        start: "top 85%",
+        once: true,
+        onEnter: () => {
+          gsap.fromTo(
+            titleSplit.chars,
+            { yPercent: 120, opacity: 0 },
+            {
+              yPercent: 0,
+              opacity: 1,
+              stagger: 0.025,
+              duration: 0.9,
+              ease: "power3.out",
+            }
+          );
+        },
+      });
+
+      ScrollTrigger.refresh();
+    };
+
+    if (document.fonts?.status === "loaded") {
+      setupTitleReveal();
+    } else {
+      document.fonts.ready.then(setupTitleReveal);
+    }
   });
 
   return (
@@ -38,16 +74,16 @@ const VideoPinSection = () => {
       >
         <video src="/videos/pin-video.mp4" playsInline muted loop autoPlay />
 
-        <div className="abs-center md:scale-100 scale-200">
+        <Link to="/blog" className="abs-center md:scale-100 scale-200">
           <img src="/images/circle-text.svg" alt="" className="spin-circle" />
           <div className="play-btn">
             <img
-              src="/images/play.svg"
+              src="/images/arrow.svg"
               alt=""
-              className="size-[3vw] ml-[.5vw]"
+              className="size-[3vw] -rotate-45"
             />
           </div>
-        </div>
+        </Link>
       </div>
     </section>
   );

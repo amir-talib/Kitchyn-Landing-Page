@@ -5,6 +5,8 @@ const NavBar = () => {
         src="/images/logokitchyn.png"
         alt="Kitchyn"
         className="md:w-36 w-28"
+        fetchpriority="high"
+        decoding="async"
       />
     </nav>
   );

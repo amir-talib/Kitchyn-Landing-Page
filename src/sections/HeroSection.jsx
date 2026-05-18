@@ -90,24 +90,15 @@ const HeroSection = () => {
   return (
     <section className="bg-main-bg">
       <div className="hero-container">
-        {isMobile ? (
-          <div
-            className="absolute inset-0 w-full h-full"
-            style={{
-              background: `
-                radial-gradient(ellipse at 15% 85%, #9d4edd55 0%, transparent 55%),
-                radial-gradient(ellipse at 85% 15%, #7b2cbf44 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, #3c096c 0%, #240046 50%, #10002b 100%)
-              `,
-            }}
-          />
-        ) : (
+        {isMobile ? null : (
           <video
             ref={videoRef}
             src="/videos/hero-bg.mp4"
+            poster="/images/hero-poster.jpg"
             autoPlay
             muted
             playsInline
+            preload="auto"
             className="absolute inset-0 w-full h-full object-cover"
           />
         )}

@@ -276,6 +276,121 @@ body::-webkit-scrollbar {
   background-image: radial-gradient(circle, #f5f0ff, #c77dff);
 }
 
+.modal-input {
+  width: 100%;
+  background: rgba(245, 240, 255, 0.08);
+  border: 1px solid rgba(245, 240, 255, 0.2);
+  border-radius: 0.75rem;
+  padding: 0.7rem 1rem;
+  font-family: var(--font-paragraph);
+  color: #f5f0ff;
+  font-size: 0.95rem;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.modal-input::placeholder {
+  color: rgba(245, 240, 255, 0.4);
+}
+.modal-input:focus {
+  outline: none;
+  border-color: rgba(224, 170, 255, 0.6);
+  background: rgba(245, 240, 255, 0.12);
+}
+
+.prose-blog {
+  font-family: var(--font-paragraph);
+  color: rgba(245, 240, 255, 0.85);
+  font-size: 1.125rem;
+  line-height: 1.75;
+}
+.prose-blog > * + * {
+  margin-top: 1.25em;
+}
+.prose-blog h2 {
+  font-family: var(--font-sans);
+  color: #f5f0ff;
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  margin-top: 2.5em;
+}
+.prose-blog h3 {
+  font-family: var(--font-sans);
+  color: #f5f0ff;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 2em;
+}
+.prose-blog p {
+  font-family: var(--font-paragraph);
+}
+.prose-blog a {
+  color: #e0aaff;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.prose-blog a:hover {
+  color: #f5f0ff;
+}
+.prose-blog strong {
+  color: #f5f0ff;
+  font-weight: 700;
+}
+.prose-blog em {
+  font-style: italic;
+  color: rgba(245, 240, 255, 0.95);
+}
+.prose-blog ul,
+.prose-blog ol {
+  padding-left: 1.5em;
+}
+.prose-blog ul {
+  list-style: disc;
+}
+.prose-blog ol {
+  list-style: decimal;
+}
+.prose-blog li + li {
+  margin-top: 0.5em;
+}
+.prose-blog blockquote {
+  border-left: 3px solid #9d4edd;
+  padding-left: 1.5em;
+  font-style: italic;
+  color: rgba(245, 240, 255, 0.95);
+  font-size: 1.2em;
+  margin: 2em 0;
+}
+.prose-blog code {
+  background: rgba(245, 240, 255, 0.1);
+  padding: 0.15em 0.4em;
+  border-radius: 0.3em;
+  font-size: 0.9em;
+}
+.prose-blog pre {
+  background: rgba(16, 0, 43, 0.6);
+  border: 1px solid rgba(245, 240, 255, 0.1);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  overflow-x: auto;
+  font-size: 0.9em;
+}
+.prose-blog pre code {
+  background: transparent;
+  padding: 0;
+}
+.prose-blog img {
+  border-radius: 1rem;
+  margin: 2em auto;
+  max-width: 100%;
+}
+.prose-blog hr {
+  border: 0;
+  border-top: 1px solid rgba(245, 240, 255, 0.1);
+  margin: 3em 0;
+}
+
 .spin-circle {
   animation: spin 20s linear infinite;
 }

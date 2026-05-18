@@ -1,12 +1,14 @@
 import { useGSAP } from "@gsap/react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import gsap from "gsap";
 import { SplitText } from "gsap/all";
 import { useMediaQuery } from "react-responsive";
+import BookDemoModal from "../components/BookDemoModal";
 
 const HeroSection = () => {
   const videoRef = useRef(null);
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
+  const [demoOpen, setDemoOpen] = useState(false);
 
   useGSAP(() => {
     const titleSplit = SplitText.create(".hero-title", {
@@ -122,11 +124,17 @@ const HeroSection = () => {
             Keep what you earn. We charge 1%.
           </h2>
 
-          <div className="hero-button">
+          <button
+            type="button"
+            onClick={() => setDemoOpen(true)}
+            className="hero-button cursor-pointer hover:scale-105 transition-transform"
+          >
             <p>Book a Demo</p>
-          </div>
+          </button>
         </div>
       </div>
+
+      <BookDemoModal open={demoOpen} onClose={() => setDemoOpen(false)} />
     </section>
   );
 };

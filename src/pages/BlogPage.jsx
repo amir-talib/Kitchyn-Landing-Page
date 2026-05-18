@@ -1,83 +1,62 @@
 import { useGSAP } from "@gsap/react";
 import { Link } from "react-router-dom";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger, SplitText } from "gsap/all";
+import { api } from "../lib/api";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const featuredPost = {
-  category: "Case Study",
-  title: "How Soul Lounge cut commissions by 29% in 30 days",
-  excerpt:
-    "When Soul Lounge stopped renting their customers and started owning them, something shifted. Here's the full breakdown — every metric, every conversation, every order.",
-  readTime: "8 min read",
-  date: "May 14, 2026",
-  gradient: "from-[#5a189a] via-[#7b2cbf] to-[#c77dff]",
-};
-
-const blogPosts = [
-  {
-    category: "Growth",
-    title: "The unfair advantage of owning your customer data",
-    excerpt:
-      "Aggregators don't share emails. They don't share phone numbers. They certainly don't share repeat-order patterns. Here's what changes the moment you do.",
-    readTime: "6 min",
-    date: "May 10, 2026",
-    gradient: "from-[#3c096c] to-[#9d4edd]",
-  },
-  {
-    category: "How-to",
-    title: "Launching your restaurant app in 24 hours: a playbook",
-    excerpt:
-      "Onboarding day, design day, go-live day. The exact checklist we run with every new Kitchyn restaurant — from menu upload to first paid order.",
-    readTime: "12 min",
-    date: "May 6, 2026",
-    gradient: "from-[#7b2cbf] to-[#c77dff]",
-  },
-  {
-    category: "Industry",
-    title: "Why Nigerian restaurants are quitting aggregators",
-    excerpt:
-      "It started in Abuja. Then Lagos. The math finally caught up — and so did the founders. A field report from the kitchens leading the exit.",
-    readTime: "7 min",
-    date: "May 2, 2026",
-    gradient: "from-[#240046] to-[#5a189a]",
-  },
-  {
-    category: "Strategy",
-    title: "The economics of 1% commission vs 30%",
-    excerpt:
-      "On a ₦10,000 order, the gap is ₦2,900. On 137 orders a month, it's ₦397,300. On 12 months, it's a new branch. The numbers, plain.",
-    readTime: "5 min",
-    date: "Apr 28, 2026",
-    gradient: "from-[#10002b] to-[#7b2cbf]",
-  },
-  {
-    category: "Insights",
-    title: "What 200+ kitchens taught us about direct orders",
-    excerpt:
-      "Patterns emerge when you watch hundreds of restaurants go live. Here are the five things that separate the ones that grow from the ones that stall.",
-    readTime: "9 min",
-    date: "Apr 22, 2026",
-    gradient: "from-[#5a189a] to-[#10002b]",
-  },
-  {
-    category: "Brand",
-    title: "Your storefront is a story. Tell it on purpose.",
-    excerpt:
-      "Logo. Photography. Tone of voice. The three things that turn a menu into a magnet — and the cheap shortcuts that quietly kill conversion.",
-    readTime: "4 min",
-    date: "Apr 18, 2026",
-    gradient: "from-[#9d4edd] to-[#3c096c]",
-  },
+const GRADIENTS = [
+  "from-[#5a189a] via-[#7b2cbf] to-[#c77dff]",
+  "from-[#3c096c] to-[#9d4edd]",
+  "from-[#7b2cbf] to-[#c77dff]",
+  "from-[#240046] to-[#5a189a]",
+  "from-[#10002b] to-[#7b2cbf]",
+  "from-[#5a189a] to-[#10002b]",
+  "from-[#9d4edd] to-[#3c096c]",
 ];
+
+function gradientFor(index) {
+  return GRADIENTS[index % GRADIENTS.length];
+}
+
+function formatDate(iso) {
+  if (!iso) return "";
+  return new Date(iso).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
 
 const BlogPage = () => {
   const containerRef = useRef(null);
+  const [posts, setPosts] = useState(null);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+    api
+      .listBlogPosts({ limit: 30 })
+      .then((data) => {
+        if (!cancelled) setPosts(data.posts ?? []);
+      })
+      .catch((err) => {
+        if (!cancelled) {
+          setError(err.message);
+          setPosts([]);
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useGSAP(
     () => {
+      if (posts === null) return;
+
       const heroSplit = SplitText.create(".blog-hero-title", { type: "chars,words" });
       const subSplit = SplitText.create(".blog-hero-sub", { type: "words,lines" });
 
@@ -131,10 +110,7 @@ const BlogPage = () => {
         opacity: 0,
         duration: 1,
         ease: "power3.out",
-        scrollTrigger: {
-          trigger: ".featured-section",
-          start: "top 80%",
-        },
+        scrollTrigger: { trigger: ".featured-section", start: "top 80%" },
       });
 
       gsap.utils.toArray(".post-card").forEach((card, i) => {
@@ -144,10 +120,7 @@ const BlogPage = () => {
           duration: 0.8,
           delay: (i % 3) * 0.1,
           ease: "power2.out",
-          scrollTrigger: {
-            trigger: card,
-            start: "top 85%",
-          },
+          scrollTrigger: { trigger: card, start: "top 85%" },
         });
       });
 
@@ -156,10 +129,7 @@ const BlogPage = () => {
         opacity: 0,
         duration: 0.8,
         ease: "power2.out",
-        scrollTrigger: {
-          trigger: ".section-label",
-          start: "top 90%",
-        },
+        scrollTrigger: { trigger: ".section-label", start: "top 90%" },
       });
 
       gsap.from(".newsletter-card", {
@@ -167,14 +137,14 @@ const BlogPage = () => {
         opacity: 0,
         duration: 1,
         ease: "power3.out",
-        scrollTrigger: {
-          trigger: ".newsletter-card",
-          start: "top 85%",
-        },
+        scrollTrigger: { trigger: ".newsletter-card", start: "top 85%" },
       });
     },
-    { scope: containerRef }
+    { scope: containerRef, dependencies: [posts] }
   );
+
+  const featured = posts && posts.length > 0 ? posts[0] : null;
+  const rest = posts && posts.length > 1 ? posts.slice(1) : [];
 
   return (
     <main
@@ -212,7 +182,7 @@ const BlogPage = () => {
         </div>
 
         <h1 className="blog-hero-title text-[14vw] md:text-[10vw] font-bold uppercase leading-[95%] tracking-[-.4vw] text-milk">
-          What's<br />
+          What&apos;s<br />
           <span className="bg-gradient-to-r from-[#c77dff] via-[#e0aaff] to-[#9d4edd] bg-clip-text text-transparent">
             Cooking
           </span>
@@ -223,79 +193,131 @@ const BlogPage = () => {
         </p>
       </section>
 
-      <section className="featured-section relative md:px-12 px-5 md:py-20 py-12">
-        <div className="section-label flex items-center gap-4 md:mb-10 mb-6">
-          <span className="w-12 h-[2px] bg-milk/50" />
-          <span className="font-paragraph text-sm uppercase tracking-widest text-milk/60">
-            Featured
-          </span>
-        </div>
-
-        <article
-          className={`featured-card relative overflow-hidden rounded-3xl bg-gradient-to-br ${featuredPost.gradient} md:p-16 p-8 cursor-pointer group transition-transform hover:scale-[1.01] duration-500`}
-        >
-          <div className="absolute -top-20 -right-20 w-80 h-80 rounded-full bg-white/10 blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-20 -left-20 w-96 h-96 rounded-full bg-black/20 blur-3xl pointer-events-none" />
-
-          <div className="relative z-10 max-w-3xl">
-            <span className="inline-block text-xs font-paragraph font-bold uppercase tracking-widest bg-milk/20 backdrop-blur-md border border-milk/30 rounded-full px-4 py-2 mb-6">
-              {featuredPost.category}
-            </span>
-            <h2 className="md:text-6xl text-3xl font-bold uppercase leading-[105%] tracking-tight mb-6">
-              {featuredPost.title}
-            </h2>
-            <p className="font-paragraph md:text-lg text-base text-milk/85 leading-relaxed md:mb-8 mb-6 max-w-2xl">
-              {featuredPost.excerpt}
-            </p>
-            <div className="flex items-center gap-6 font-paragraph text-sm text-milk/70">
-              <span>{featuredPost.date}</span>
-              <span className="w-1 h-1 rounded-full bg-milk/40" />
-              <span>{featuredPost.readTime}</span>
-              <span className="ml-auto inline-flex items-center gap-2 text-milk font-semibold group-hover:gap-4 transition-all">
-                Read story →
-              </span>
-            </div>
-          </div>
-        </article>
-      </section>
-
-      <section className="relative md:px-12 px-5 md:py-20 py-12">
-        <div className="section-label flex items-center gap-4 md:mb-12 mb-8">
-          <span className="w-12 h-[2px] bg-milk/50" />
-          <span className="font-paragraph text-sm uppercase tracking-widest text-milk/60">
-            Latest stories
-          </span>
-        </div>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {blogPosts.map((post, i) => (
-            <article
-              key={i}
-              className={`post-card relative overflow-hidden rounded-2xl bg-gradient-to-br ${post.gradient} md:p-10 p-7 cursor-pointer group transition-transform hover:scale-[1.02] hover:-translate-y-1 duration-300 min-h-[400px] flex flex-col`}
-            >
-              <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-white/10 blur-2xl pointer-events-none transition-opacity group-hover:opacity-60" />
-
-              <div className="relative z-10 flex flex-col h-full">
-                <span className="inline-block self-start text-xs font-paragraph font-bold uppercase tracking-widest bg-milk/20 backdrop-blur-md border border-milk/30 rounded-full px-3 py-1.5 mb-5">
-                  {post.category}
+      {posts === null ? (
+        <section className="relative md:px-12 px-5 py-32 text-center font-paragraph text-milk/60">
+          Loading stories…
+        </section>
+      ) : posts.length === 0 ? (
+        <section className="relative md:px-12 px-5 py-32 text-center">
+          <p className="font-paragraph md:text-xl text-base text-milk/70 max-w-md mx-auto">
+            {error
+              ? "We couldn't reach the kitchen right now. Try again in a moment."
+              : "The first stories are coming soon. Check back shortly."}
+          </p>
+        </section>
+      ) : (
+        <>
+          {featured && (
+            <section className="featured-section relative md:px-12 px-5 md:py-20 py-12">
+              <div className="section-label flex items-center gap-4 md:mb-10 mb-6">
+                <span className="w-12 h-[2px] bg-milk/50" />
+                <span className="font-paragraph text-sm uppercase tracking-widest text-milk/60">
+                  Featured
                 </span>
-                <h3 className="md:text-2xl text-xl font-bold uppercase leading-[110%] tracking-tight mb-4">
-                  {post.title}
-                </h3>
-                <p className="font-paragraph text-sm text-milk/80 leading-relaxed mb-6 flex-1">
-                  {post.excerpt}
-                </p>
-                <div className="flex items-center justify-between font-paragraph text-xs text-milk/60">
-                  <span>{post.date}</span>
-                  <span className="inline-flex items-center gap-1 text-milk font-semibold group-hover:gap-2 transition-all">
-                    Read →
-                  </span>
-                </div>
               </div>
-            </article>
-          ))}
-        </div>
-      </section>
+
+              <Link
+                to={`/blog/${featured.slug}`}
+                className={`featured-card relative overflow-hidden rounded-3xl bg-gradient-to-br ${gradientFor(0)} md:p-16 p-8 cursor-pointer group block transition-transform hover:scale-[1.01] duration-500`}
+              >
+                {featured.cover_image_url && (
+                  <div
+                    aria-hidden
+                    className="absolute inset-0 opacity-30"
+                    style={{
+                      backgroundImage: `url(${featured.cover_image_url})`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
+                  />
+                )}
+                <div className="absolute -top-20 -right-20 w-80 h-80 rounded-full bg-white/10 blur-3xl pointer-events-none" />
+                <div className="absolute -bottom-20 -left-20 w-96 h-96 rounded-full bg-black/20 blur-3xl pointer-events-none" />
+
+                <div className="relative z-10 max-w-3xl">
+                  <span className="inline-block text-xs font-paragraph font-bold uppercase tracking-widest bg-milk/20 backdrop-blur-md border border-milk/30 rounded-full px-4 py-2 mb-6">
+                    Featured
+                  </span>
+                  <h2 className="md:text-6xl text-3xl font-bold uppercase leading-[105%] tracking-tight mb-6">
+                    {featured.title}
+                  </h2>
+                  {featured.excerpt && (
+                    <p className="font-paragraph md:text-lg text-base text-milk/85 leading-relaxed md:mb-8 mb-6 max-w-2xl">
+                      {featured.excerpt}
+                    </p>
+                  )}
+                  <div className="flex items-center gap-6 font-paragraph text-sm text-milk/70 flex-wrap">
+                    <span>{formatDate(featured.published_at)}</span>
+                    {featured.read_minutes && (
+                      <>
+                        <span className="w-1 h-1 rounded-full bg-milk/40" />
+                        <span>{featured.read_minutes} min read</span>
+                      </>
+                    )}
+                    <span className="ml-auto inline-flex items-center gap-2 text-milk font-semibold group-hover:gap-4 transition-all">
+                      Read story →
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            </section>
+          )}
+
+          {rest.length > 0 && (
+            <section className="relative md:px-12 px-5 md:py-20 py-12">
+              <div className="section-label flex items-center gap-4 md:mb-12 mb-8">
+                <span className="w-12 h-[2px] bg-milk/50" />
+                <span className="font-paragraph text-sm uppercase tracking-widest text-milk/60">
+                  Latest stories
+                </span>
+              </div>
+
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {rest.map((post, i) => (
+                  <Link
+                    key={post.id}
+                    to={`/blog/${post.slug}`}
+                    className={`post-card relative overflow-hidden rounded-2xl bg-gradient-to-br ${gradientFor(i + 1)} md:p-10 p-7 cursor-pointer group transition-transform hover:scale-[1.02] hover:-translate-y-1 duration-300 min-h-[400px] flex flex-col`}
+                  >
+                    {post.cover_image_url && (
+                      <div
+                        aria-hidden
+                        className="absolute inset-0 opacity-25"
+                        style={{
+                          backgroundImage: `url(${post.cover_image_url})`,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                        }}
+                      />
+                    )}
+                    <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-white/10 blur-2xl pointer-events-none transition-opacity group-hover:opacity-60" />
+
+                    <div className="relative z-10 flex flex-col h-full">
+                      <span className="inline-block self-start text-xs font-paragraph font-bold uppercase tracking-widest bg-milk/20 backdrop-blur-md border border-milk/30 rounded-full px-3 py-1.5 mb-5">
+                        {post.author_name}
+                      </span>
+                      <h3 className="md:text-2xl text-xl font-bold uppercase leading-[110%] tracking-tight mb-4">
+                        {post.title}
+                      </h3>
+                      {post.excerpt && (
+                        <p className="font-paragraph text-sm text-milk/80 leading-relaxed mb-6 flex-1">
+                          {post.excerpt}
+                        </p>
+                      )}
+                      <div className="flex items-center justify-between font-paragraph text-xs text-milk/60">
+                        <span>{formatDate(post.published_at)}</span>
+                        <span className="inline-flex items-center gap-1 text-milk font-semibold group-hover:gap-2 transition-all">
+                          Read →
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
+        </>
+      )}
 
       <section className="relative md:px-12 px-5 md:py-24 py-16">
         <div className="newsletter-card relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#10002b] via-[#240046] to-[#3c096c] border border-milk/20 md:p-16 p-8 text-center">

@@ -23,17 +23,17 @@ const NavBar = () => {
         onMouseEnter={triggerPrefetch}
         onFocus={triggerPrefetch}
         onTouchStart={triggerPrefetch}
-        className="pointer-events-auto group flex items-center md:gap-2.5 gap-2 bg-[#240046] hover:bg-[#3c096c] text-milk font-paragraph font-semibold md:text-sm text-xs uppercase tracking-[0.15em] rounded-full md:px-5 px-3.5 md:py-2.5 py-2 transition-all hover:scale-105 shadow-lg shadow-[#10002b]/20 border border-milk/15 backdrop-blur-md"
+        className="pointer-events-auto group flex items-center md:gap-2.5 gap-2 bg-[#4B1F70] hover:bg-[#6A35A0] text-milk rounded-full md:p-3.5 p-3 transition-all hover:scale-105 shadow-lg shadow-[#10002b]/20 border border-milk/15 backdrop-blur-md"
         aria-label="Read the blog"
       >
         <span className="relative flex h-2 w-2">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#c77dff] opacity-75" />
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-[#c77dff]" />
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#BFA0E0] opacity-75" />
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-[#BFA0E0]" />
         </span>
-        <span>Stories</span>
-        <span className="transition-transform group-hover:translate-x-0.5">
-          →
-        </span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+        </svg>
       </Link>
     </nav>
   );

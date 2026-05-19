@@ -10,17 +10,18 @@
 }
 
 @theme {
-  --color-black: #10002b;
-  --color-main-bg: #240046;
+  --color-black: #0D0420;
+  --color-main-bg: #1A0840;
   --color-white: #ffffff;
   --color-dark-brown: #3c096c;
-  --color-mid-brown: #5a189a;
-  --color-light-brown: #9d4edd;
-  --color-red-brown: #240046;
-  --color-yellow-brown: #7b2cbf;
-  --color-milk-yellow: #c77dff;
-  --color-red: #7b2cbf;
-  --color-milk: #f5f0ff;
+  --color-mid-brown: #6A35A0;
+  --color-light-brown: #8B5CC4;
+  --color-red-brown: #1A0840;
+  --color-yellow-brown: #4B1F70;
+  --color-milk-yellow: #BFA0E0;
+  --color-red: #4B1F70;
+  --color-milk: #F0E8FA;
+  --color-brand: #4B1F70;
   --font-sans: "Antonio", sans-serif;
   --font-paragraph: "ProximaNova", sans-serif;
   --font-playful: "Nunito", sans-serif;
@@ -32,7 +33,7 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background-color: #f5f0ff;
+  background-color: #F0E8FA;
   color: #3c096c;
   font-family: "Antonio", sans-serif;
   overflow-x: hidden;
@@ -175,7 +176,7 @@ body::-webkit-scrollbar {
     }
 
     .nutrition-text-scroll {
-      @apply rotate-[-3deg] border-[.5vw] border-[#c77dff] text-nowrap opacity-0 md:-mt-32 -mt-24;
+      @apply rotate-[-3deg] border-[.5vw] border-[#BFA0E0] text-nowrap opacity-0 md:-mt-32 -mt-24;
     }
 
     .nutrition-box {
@@ -274,7 +275,7 @@ body::-webkit-scrollbar {
 
 .nutrition-section {
   background-color: #f5f0ff00;
-  background-image: radial-gradient(circle, #f5f0ff, #c77dff);
+  background-image: radial-gradient(circle, #f5f0ff, #BFA0E0);
 }
 
 .modal-input {
@@ -340,16 +341,16 @@ body::-webkit-scrollbar {
   color: rgba(36, 0, 70, 0.82);
 }
 .prose-blog a {
-  color: #5a189a;
+  color: #4B1F70;
   text-decoration: underline;
-  text-decoration-color: rgba(157, 78, 221, 0.5);
+  text-decoration-color: rgba(75, 31, 112, 0.4);
   text-underline-offset: 0.22em;
   text-decoration-thickness: 1px;
   transition: color 0.15s ease, text-decoration-color 0.15s ease;
 }
 .prose-blog a:hover {
-  color: #3c096c;
-  text-decoration-color: #7b2cbf;
+  color: #2D1160;
+  text-decoration-color: #4B1F70;
 }
 .prose-blog strong {
   color: #10002b;

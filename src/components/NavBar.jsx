@@ -1,7 +1,25 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { prefetchPosts } from "../lib/blogCache";
 
 const NavBar = () => {
+  const [logoInverted, setLogoInverted] = useState(true);
+
+  useEffect(() => {
+    const check = () => {
+      const darkSections = document.querySelectorAll("[data-nav-dark]");
+      let overDark = false;
+      darkSections.forEach((el) => {
+        const { top, bottom } = el.getBoundingClientRect();
+        if (top <= 80 && bottom > 0) overDark = true;
+      });
+      setLogoInverted(overDark);
+    };
+    check();
+    window.addEventListener("scroll", check, { passive: true });
+    return () => window.removeEventListener("scroll", check);
+  }, []);
+
   const triggerPrefetch = () => {
     prefetchPosts().catch(() => {});
   };
@@ -12,8 +30,8 @@ const NavBar = () => {
         <img
           src="/images/logokitchyn.png"
           alt="Kitchyn"
-          className="md:w-36 w-24"
-          style={{ filter: "brightness(0) invert(1)" }}
+          className="md:w-36 w-24 transition-[filter] duration-300"
+          style={logoInverted ? { filter: "brightness(0) invert(1)" } : undefined}
           fetchpriority="high"
           decoding="async"
         />

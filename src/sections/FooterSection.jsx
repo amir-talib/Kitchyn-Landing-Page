@@ -6,7 +6,7 @@ const FooterSection = () => {
   });
 
   return (
-    <section className="footer-section">
+    <section className="footer-section" data-nav-dark>
       <img
         src="/images/footer-dip.png"
         alt=""

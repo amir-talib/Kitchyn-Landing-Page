@@ -90,7 +90,7 @@ const HeroSection = () => {
   });
 
   return (
-    <section className="bg-main-bg">
+    <section className="bg-main-bg" data-nav-dark>
       <div className="hero-container">
         {isMobile ? null : (
           <video

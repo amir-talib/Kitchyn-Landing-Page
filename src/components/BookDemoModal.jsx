@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { api } from "../lib/api";
 
 const BookDemoModal = ({ open, onClose }) => {
@@ -14,7 +15,7 @@ const BookDemoModal = ({ open, onClose }) => {
 
   useEffect(() => {
     if (open && firstFieldRef.current) {
-      firstFieldRef.current.focus();
+      firstFieldRef.current.focus({ preventScroll: true });
     }
     if (!open) {
       // Reset on close
@@ -41,7 +42,7 @@ const BookDemoModal = ({ open, onClose }) => {
     }
   }, [open]);
 
-  if (!open) return null;
+  if (!open || typeof document === "undefined") return null;
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -69,7 +70,7 @@ const BookDemoModal = ({ open, onClose }) => {
     }
   }
 
-  return (
+  return createPortal(
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#10002b]/80 backdrop-blur-md"
       onClick={(e) => {
@@ -208,7 +209,8 @@ const BookDemoModal = ({ open, onClose }) => {
           </>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

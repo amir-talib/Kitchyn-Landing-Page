@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import { marked } from "marked";
 import { api } from "../lib/api";
+import BookDemoModal from "../components/BookDemoModal";
 
 marked.setOptions({ gfm: true, breaks: true });
 
@@ -21,6 +22,7 @@ const BlogPostPage = () => {
   const containerRef = useRef(null);
   const [post, setPost] = useState(null);
   const [error, setError] = useState("");
+  const [demoOpen, setDemoOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -43,39 +45,60 @@ const BlogPostPage = () => {
     () => {
       if (!post) return;
       gsap.from(".post-nav", {
-        y: -40,
+        y: -24,
         opacity: 0,
-        duration: 0.8,
+        duration: 0.7,
         ease: "power2.out",
       });
-      gsap.from(".post-meta > *", {
-        y: 20,
+      gsap.from(".post-eyebrow", {
+        y: 12,
         opacity: 0,
-        stagger: 0.08,
         duration: 0.6,
         ease: "power2.out",
-        delay: 0.2,
+        delay: 0.05,
       });
       gsap.from(".post-title", {
-        y: 60,
-        opacity: 0,
-        duration: 1,
-        ease: "power3.out",
-        delay: 0.4,
-      });
-      gsap.from(".post-cover", {
-        scale: 0.95,
-        opacity: 0,
-        duration: 1,
-        ease: "power3.out",
-        delay: 0.7,
-      });
-      gsap.from(".post-body", {
         y: 30,
+        opacity: 0,
+        duration: 0.9,
+        ease: "power3.out",
+        delay: 0.15,
+      });
+      gsap.from(".post-excerpt", {
+        y: 20,
         opacity: 0,
         duration: 0.8,
         ease: "power2.out",
-        delay: 0.9,
+        delay: 0.3,
+      });
+      gsap.from(".post-meta > *", {
+        y: 12,
+        opacity: 0,
+        stagger: 0.06,
+        duration: 0.6,
+        ease: "power2.out",
+        delay: 0.45,
+      });
+      gsap.from(".post-cover", {
+        y: 30,
+        opacity: 0,
+        duration: 0.9,
+        ease: "power3.out",
+        delay: 0.55,
+      });
+      gsap.from(".post-body", {
+        y: 20,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power2.out",
+        delay: 0.7,
+      });
+      gsap.from(".post-cta", {
+        y: 24,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power3.out",
+        delay: 0.85,
       });
     },
     { scope: containerRef, dependencies: [post] }
@@ -89,111 +112,255 @@ const BlogPostPage = () => {
   return (
     <main
       ref={containerRef}
-      className="bg-main-bg text-milk min-h-screen relative overflow-x-hidden"
+      className="blog-typography bg-white min-h-screen relative"
+      style={{ color: "#10002b" }}
     >
-      <div className="absolute top-[5%] left-[5%] w-[400px] h-[400px] rounded-full bg-gradient-to-br from-[#7b2cbf] to-[#c77dff] opacity-15 blur-[120px] pointer-events-none" />
-      <div className="absolute top-[45%] right-[5%] w-[450px] h-[450px] rounded-full bg-gradient-to-br from-[#5a189a] to-[#3c096c] opacity-20 blur-[120px] pointer-events-none" />
-
-      <nav className="post-nav fixed top-0 left-0 right-0 z-50 flex items-center justify-between md:px-12 px-5 py-6 backdrop-blur-md bg-[#10002b]/40">
-        <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-          <img src="/images/logokitchyn.png" alt="Kitchyn" className="md:w-28 w-20" />
-        </Link>
-        <Link
-          to="/blog"
-          className="flex items-center gap-2 text-milk hover:gap-3 transition-all font-paragraph md:text-base text-sm border border-milk/30 rounded-full md:px-6 px-4 md:py-3 py-2 hover:bg-milk/10"
-        >
-          <span>← All stories</span>
-        </Link>
+      {/* NAV */}
+      <nav className="post-nav sticky top-0 z-40 bg-white/85 backdrop-blur-md border-b border-[#10002b]/[0.06]">
+        <div className="max-w-6xl mx-auto flex items-center justify-between md:px-10 px-5 md:py-4 py-3">
+          <Link
+            to="/"
+            className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+          >
+            <img
+              src="/images/logokitchyn.png"
+              alt="Kitchyn"
+              className="md:w-24 w-20"
+            />
+          </Link>
+          <div className="flex items-center md:gap-2 gap-1">
+            <Link
+              to="/blog"
+              className="hidden sm:inline-flex items-center gap-1.5 text-[#240046]/70 hover:text-[#240046] transition-colors text-sm font-medium px-3 py-2 rounded-full"
+            >
+              <span aria-hidden>←</span>
+              <span>All stories</span>
+            </Link>
+            <button
+              type="button"
+              onClick={() => setDemoOpen(true)}
+              className="inline-flex items-center gap-2 bg-[#5a189a] hover:bg-[#3c096c] text-white text-sm font-semibold rounded-full md:px-5 px-4 md:py-2.5 py-2 transition-colors"
+            >
+              Book a demo
+            </button>
+          </div>
+        </div>
       </nav>
 
+      {/* LOADING SKELETON */}
       {post === null && !error && (
-        <section className="relative md:px-12 px-5 pt-40 pb-32 text-center font-paragraph text-milk/60">
-          Loading…
+        <section className="max-w-3xl mx-auto md:px-10 px-5 md:pt-20 pt-12 md:pb-32 pb-20">
+          <div className="animate-pulse space-y-5">
+            <div className="h-3 w-32 bg-[#f5f0ff] rounded" />
+            <div className="h-10 w-3/4 bg-[#f5f0ff] rounded" />
+            <div className="h-10 w-2/3 bg-[#f5f0ff] rounded" />
+            <div className="h-4 w-full bg-[#f5f0ff] rounded mt-6" />
+            <div className="h-4 w-5/6 bg-[#f5f0ff] rounded" />
+            <div className="h-72 w-full bg-[#f5f0ff] rounded-2xl mt-8" />
+          </div>
         </section>
       )}
 
+      {/* ERROR STATE */}
       {error && (
-        <section className="relative md:px-12 px-5 pt-40 pb-32 text-center">
-          <p className="font-paragraph md:text-xl text-base text-milk/70 max-w-md mx-auto mb-6">
-            We couldn&apos;t find that story.
-          </p>
-          <Link
-            to="/blog"
-            className="inline-block bg-milk text-[#10002b] font-paragraph font-bold uppercase tracking-wider rounded-full px-6 py-3 hover:bg-[#e0aaff] transition-colors"
+        <section className="max-w-2xl mx-auto md:px-10 px-5 md:pt-24 pt-16 md:pb-32 pb-20 text-center">
+          <span className="inline-block text-xs font-semibold uppercase tracking-[0.18em] text-[#7b2cbf] mb-4">
+            Not found
+          </span>
+          <h1
+            className="font-semibold text-[#10002b] tracking-tight"
+            style={{
+              fontFamily: "var(--font-editorial)",
+              fontSize: "clamp(1.5rem, 3vw, 2rem)",
+              lineHeight: 1.2,
+            }}
           >
-            Back to stories
-          </Link>
+            We couldn&apos;t reach the kitchen right now.
+          </h1>
+          <p
+            className="mt-3 text-[#240046]/65"
+            style={{ fontFamily: "var(--font-editorial)" }}
+          >
+            The story you&apos;re looking for may have moved. Browse the latest
+            stories or get in touch.
+          </p>
+          <div className="mt-7 flex items-center justify-center gap-3 flex-wrap">
+            <Link
+              to="/blog"
+              className="inline-flex items-center gap-2 bg-[#10002b] hover:bg-[#240046] text-white text-sm font-semibold rounded-full px-5 py-3 transition-colors"
+            >
+              Back to stories
+            </Link>
+            <button
+              type="button"
+              onClick={() => setDemoOpen(true)}
+              className="inline-flex items-center gap-2 text-[#5a189a] hover:text-[#3c096c] text-sm font-semibold px-3 py-3 transition-colors"
+            >
+              Book a demo
+              <span aria-hidden>→</span>
+            </button>
+          </div>
         </section>
       )}
 
+      {/* POST */}
       {post && (
         <>
-          <section className="relative md:px-12 px-5 md:pt-40 pt-32 md:pb-12 pb-10 max-w-4xl mx-auto">
-            <div className="post-meta flex items-center gap-3 md:mb-10 mb-6 flex-wrap font-paragraph text-sm text-milk/70">
-              <span className="inline-block bg-milk/10 border border-milk/20 backdrop-blur-md rounded-full px-3 py-1.5 uppercase tracking-widest text-xs font-semibold">
-                {post.author_name}
+          <article>
+            <header className="max-w-3xl mx-auto md:px-10 px-5 md:pt-16 pt-10 md:pb-10 pb-8">
+              <span className="post-eyebrow inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#7b2cbf] mb-5">
+                <Link
+                  to="/blog"
+                  className="hover:text-[#5a189a] transition-colors"
+                >
+                  The Kitchyn Journal
+                </Link>
               </span>
-              <span>{formatDate(post.published_at)}</span>
-              {post.read_minutes && (
-                <>
-                  <span className="w-1 h-1 rounded-full bg-milk/40" />
-                  <span>{post.read_minutes} min read</span>
-                </>
-              )}
-            </div>
 
-            <h1 className="post-title md:text-6xl text-3xl font-bold uppercase leading-[100%] tracking-tight md:mb-8 mb-6">
-              {post.title}
-            </h1>
-
-            {post.excerpt && (
-              <p className="font-paragraph md:text-2xl text-lg text-milk/80 leading-relaxed md:mb-12 mb-8">
-                {post.excerpt}
-              </p>
-            )}
-          </section>
-
-          {post.cover_image_url && (
-            <section className="relative md:px-12 px-5 md:pb-16 pb-10 max-w-5xl mx-auto">
-              <img
-                src={post.cover_image_url}
-                alt=""
-                className="post-cover w-full aspect-[16/9] object-cover rounded-3xl border border-milk/10"
-              />
-            </section>
-          )}
-
-          <section className="relative md:px-12 px-5 md:pb-32 pb-20 max-w-3xl mx-auto">
-            <article
-              className="post-body prose-blog"
-              dangerouslySetInnerHTML={{ __html: html }}
-            />
-          </section>
-
-          <section className="relative md:px-12 px-5 md:pb-32 pb-20 max-w-3xl mx-auto text-center">
-            <div className="border-t border-milk/10 pt-12">
-              <p className="font-paragraph text-milk/60 mb-6">
-                Ready to run your own kitchyn?
-              </p>
-              <Link
-                to="/"
-                className="inline-block bg-milk text-[#10002b] font-paragraph font-bold uppercase tracking-wider rounded-full md:px-8 px-6 md:py-4 py-3 hover:bg-[#e0aaff] transition-colors"
+              <h1
+                className="post-title font-semibold text-[#10002b] tracking-[-0.03em]"
+                style={{
+                  fontFamily: "var(--font-editorial)",
+                  fontSize: "clamp(2rem, 5vw, 3.5rem)",
+                  lineHeight: 1.08,
+                }}
               >
-                Book a demo
-              </Link>
+                {post.title}
+              </h1>
+
+              {post.excerpt && (
+                <p
+                  className="post-excerpt mt-5 text-[#240046]/70"
+                  style={{
+                    fontFamily: "var(--font-editorial)",
+                    fontSize: "clamp(1.05rem, 1.5vw, 1.25rem)",
+                    lineHeight: 1.55,
+                  }}
+                >
+                  {post.excerpt}
+                </p>
+              )}
+
+              <div
+                className="post-meta mt-8 flex items-center gap-3 flex-wrap text-sm text-[#240046]/60"
+                style={{ fontFamily: "var(--font-editorial)" }}
+              >
+                {post.author_name && (
+                  <span className="font-semibold text-[#240046]/80">
+                    {post.author_name}
+                  </span>
+                )}
+                {post.author_name && post.published_at && (
+                  <span className="w-1 h-1 rounded-full bg-[#240046]/30" />
+                )}
+                {post.published_at && (
+                  <span>{formatDate(post.published_at)}</span>
+                )}
+                {post.read_minutes && (
+                  <>
+                    <span className="w-1 h-1 rounded-full bg-[#240046]/30" />
+                    <span>{post.read_minutes} min read</span>
+                  </>
+                )}
+              </div>
+            </header>
+
+            {post.cover_image_url && (
+              <div className="max-w-5xl mx-auto md:px-10 px-5 md:pb-14 pb-10">
+                <div className="post-cover relative overflow-hidden rounded-2xl bg-[#f5f0ff] aspect-[16/9] ring-1 ring-[#10002b]/[0.06]">
+                  <img
+                    src={post.cover_image_url}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+            )}
+
+            <div className="max-w-2xl mx-auto md:px-10 px-5 md:pb-20 pb-16">
+              <div
+                className="post-body prose-blog"
+                dangerouslySetInnerHTML={{ __html: html }}
+              />
+            </div>
+          </article>
+
+          {/* INLINE CTA → opens modal */}
+          <section className="max-w-3xl mx-auto md:px-10 px-5 md:pb-24 pb-16">
+            <div className="post-cta relative overflow-hidden rounded-2xl bg-[#f5f0ff] ring-1 ring-[#10002b]/[0.06] md:p-10 p-7 text-center">
+              <div className="absolute -top-20 -left-20 w-64 h-64 rounded-full bg-[#c77dff]/30 blur-3xl pointer-events-none" />
+              <div className="absolute -bottom-20 -right-20 w-64 h-64 rounded-full bg-[#9d4edd]/20 blur-3xl pointer-events-none" />
+              <div className="relative">
+                <span className="text-xs font-semibold uppercase tracking-[0.18em] text-[#7b2cbf]">
+                  See it in action
+                </span>
+                <h3
+                  className="mt-3 font-semibold text-[#10002b] tracking-tight"
+                  style={{
+                    fontFamily: "var(--font-editorial)",
+                    fontSize: "clamp(1.5rem, 2.6vw, 2rem)",
+                    lineHeight: 1.18,
+                  }}
+                >
+                  Ready to run your own Kitchyn?
+                </h3>
+                <p
+                  className="mt-3 text-[#240046]/65 max-w-md mx-auto"
+                  style={{
+                    fontFamily: "var(--font-editorial)",
+                    fontSize: "1rem",
+                    lineHeight: 1.55,
+                  }}
+                >
+                  Book a quick walkthrough. We&apos;ll show you how operators
+                  own their customers and grow without renting traffic.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setDemoOpen(true)}
+                  className="mt-6 inline-flex items-center gap-2 bg-[#10002b] hover:bg-[#240046] text-white text-sm font-semibold rounded-full px-6 py-3 transition-colors"
+                >
+                  Book a demo
+                  <span aria-hidden>→</span>
+                </button>
+              </div>
             </div>
           </section>
         </>
       )}
 
-      <footer className="relative md:px-12 px-5 md:py-12 py-8 border-t border-milk/10">
-        <div className="flex md:flex-row flex-col md:justify-between justify-center items-center gap-4 font-paragraph text-milk/50 text-sm">
-          <p>Copyright © 2026 Kitchyn — All Rights Reserved</p>
-          <Link to="/blog" className="hover:text-milk transition-colors">
-            ← All stories
-          </Link>
+      {/* FOOTER */}
+      <footer className="mt-4 border-t border-[#10002b]/[0.08]">
+        <div
+          className="max-w-6xl mx-auto md:px-10 px-5 md:py-10 py-8 flex md:flex-row flex-col md:items-center md:justify-between gap-4 text-sm text-[#240046]/55"
+          style={{ fontFamily: "var(--font-editorial)" }}
+        >
+          <p>© 2026 Kitchyn — Stories from the kitchen.</p>
+          <div className="flex items-center gap-5">
+            <Link
+              to="/"
+              className="hover:text-[#5a189a] transition-colors"
+            >
+              Home
+            </Link>
+            <Link
+              to="/blog"
+              className="hover:text-[#5a189a] transition-colors"
+            >
+              All stories
+            </Link>
+            <button
+              type="button"
+              onClick={() => setDemoOpen(true)}
+              className="hover:text-[#5a189a] transition-colors"
+            >
+              Book a demo
+            </button>
+          </div>
         </div>
       </footer>
+
+      <BookDemoModal open={demoOpen} onClose={() => setDemoOpen(false)} />
     </main>
   );
 };

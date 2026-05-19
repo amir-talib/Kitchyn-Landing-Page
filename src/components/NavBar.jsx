@@ -13,6 +13,7 @@ const NavBar = () => {
           src="/images/logokitchyn.png"
           alt="Kitchyn"
           className="md:w-36 w-24"
+          style={{ filter: "brightness(0) invert(1)" }}
           fetchpriority="high"
           decoding="async"
         />

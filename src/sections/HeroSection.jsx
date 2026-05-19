@@ -90,7 +90,7 @@ const HeroSection = () => {
   });
 
   return (
-    <section className="bg-main-bg" data-nav-dark>
+    <section className="bg-main-bg" data-nav-dark data-nav-dark-desktop-only>
       <div className="hero-container">
         {isMobile ? null : (
           <video

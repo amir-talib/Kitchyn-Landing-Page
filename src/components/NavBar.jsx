@@ -3,13 +3,15 @@ import { Link } from "react-router-dom";
 import { prefetchPosts } from "../lib/blogCache";
 
 const NavBar = () => {
-  const [logoInverted, setLogoInverted] = useState(true);
+  const [logoInverted, setLogoInverted] = useState(() => window.innerWidth >= 768);
 
   useEffect(() => {
     const check = () => {
+      const isMobile = window.innerWidth < 768;
       const darkSections = document.querySelectorAll("[data-nav-dark]");
       let overDark = false;
       darkSections.forEach((el) => {
+        if (isMobile && el.hasAttribute("data-nav-dark-desktop-only")) return;
         const { top, bottom } = el.getBoundingClientRect();
         if (top <= 80 && bottom > 0) overDark = true;
       });
@@ -17,7 +19,11 @@ const NavBar = () => {
     };
     check();
     window.addEventListener("scroll", check, { passive: true });
-    return () => window.removeEventListener("scroll", check);
+    window.addEventListener("resize", check, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", check);
+      window.removeEventListener("resize", check);
+    };
   }, []);
 
   const triggerPrefetch = () => {

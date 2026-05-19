@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger, SplitText } from "gsap/all";
 import { api } from "../lib/api";
+import { blogCache, prefetchPosts, prefetchPost } from "../lib/blogCache";
 import BookDemoModal from "../components/BookDemoModal";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -52,16 +53,19 @@ const CoverImage = ({ url, alt, fallbackIndex = 0, className = "" }) => {
 
 const BlogPage = () => {
   const containerRef = useRef(null);
-  const [posts, setPosts] = useState(null);
+  // Hydrate synchronously from cache so revisits skip the loading flash entirely.
+  const [posts, setPosts] = useState(() => blogCache.getPosts());
   const [error, setError] = useState("");
   const [demoOpen, setDemoOpen] = useState(false);
+  // Track whether the first render had data — if so, skip entrance animations.
+  const skipAnimations = useRef(blogCache.getPosts() !== null);
 
   useEffect(() => {
+    if (blogCache.getPosts()) return;
     let cancelled = false;
-    api
-      .listBlogPosts({ limit: 30 })
-      .then((data) => {
-        if (!cancelled) setPosts(data.posts ?? []);
+    prefetchPosts()
+      .then((fresh) => {
+        if (!cancelled) setPosts(fresh ?? []);
       })
       .catch((err) => {
         if (!cancelled) {
@@ -77,6 +81,7 @@ const BlogPage = () => {
   useGSAP(
     () => {
       if (posts === null) return;
+      if (skipAnimations.current) return;
 
       gsap.from(".blog-nav", {
         y: -24,
@@ -325,6 +330,9 @@ const BlogPage = () => {
 
               <Link
                 to={`/blog/${featured.slug}`}
+                onMouseEnter={() => prefetchPost(featured.slug).catch(() => {})}
+                onFocus={() => prefetchPost(featured.slug).catch(() => {})}
+                onTouchStart={() => prefetchPost(featured.slug).catch(() => {})}
                 className="featured-card group grid md:grid-cols-12 gap-8 md:gap-10 items-center"
               >
                 <div className="md:col-span-7 relative overflow-hidden rounded-2xl bg-[#f5f0ff] aspect-[16/10] ring-1 ring-[#10002b]/[0.06]">
@@ -450,6 +458,9 @@ const BlogPage = () => {
                   <Link
                     key={post.id}
                     to={`/blog/${post.slug}`}
+                    onMouseEnter={() => prefetchPost(post.slug).catch(() => {})}
+                    onFocus={() => prefetchPost(post.slug).catch(() => {})}
+                    onTouchStart={() => prefetchPost(post.slug).catch(() => {})}
                     className="post-card group flex flex-col"
                   >
                     <div className="relative overflow-hidden rounded-xl bg-[#f5f0ff] aspect-[16/10] ring-1 ring-[#10002b]/[0.06] group-hover:ring-[#9d4edd]/40 transition-all">

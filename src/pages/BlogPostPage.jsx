@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import { marked } from "marked";
 import { api } from "../lib/api";
+import { blogCache, prefetchPost } from "../lib/blogCache";
 import BookDemoModal from "../components/BookDemoModal";
 
 marked.setOptions({ gfm: true, breaks: true });
@@ -20,18 +21,25 @@ function formatDate(iso) {
 const BlogPostPage = () => {
   const { slug } = useParams();
   const containerRef = useRef(null);
-  const [post, setPost] = useState(null);
+  // Hydrate from cache synchronously when available — no loading flash on revisit
+  // or when arriving here from a list card that had hover-prefetched.
+  const [post, setPost] = useState(() => blogCache.getPost(slug));
   const [error, setError] = useState("");
   const [demoOpen, setDemoOpen] = useState(false);
+  const skipAnimations = useRef(blogCache.getPost(slug) !== null);
 
   useEffect(() => {
-    let cancelled = false;
-    setPost(null);
+    const cached = blogCache.getPost(slug);
+    skipAnimations.current = cached !== null;
+    setPost(cached);
     setError("");
-    api
-      .getBlogPost(slug)
-      .then((data) => {
-        if (!cancelled) setPost(data.post);
+
+    if (cached) return;
+
+    let cancelled = false;
+    prefetchPost(slug)
+      .then((fresh) => {
+        if (!cancelled) setPost(fresh);
       })
       .catch((err) => {
         if (!cancelled) setError(err.message);
@@ -44,6 +52,7 @@ const BlogPostPage = () => {
   useGSAP(
     () => {
       if (!post) return;
+      if (skipAnimations.current) return;
       gsap.from(".post-nav", {
         y: -24,
         opacity: 0,

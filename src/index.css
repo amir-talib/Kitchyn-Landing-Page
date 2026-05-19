@@ -278,6 +278,19 @@ body::-webkit-scrollbar {
   background-image: radial-gradient(circle, #f5f0ff, #BFA0E0);
 }
 
+@media (max-width: 767px) {
+  :root {
+    --color-milk: #ffffff;
+  }
+  html,
+  body {
+    background-color: #ffffff;
+  }
+  .nutrition-section {
+    background-image: radial-gradient(circle, #ffffff, #EAD8F5);
+  }
+}
+
 .modal-input {
   width: 100%;
   background: rgba(245, 240, 255, 0.08);
